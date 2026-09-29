@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Laporan — Staf</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/style.css" />
+<link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#4f46e5">
+  <link rel="apple-touch-icon" href="assets/icon-180.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="SAS EMPIRE">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/icon-32.png">
+</head>
+<body>
+<div class="mobile-shell">
+  <div id="app"></div>
+  <div id="tabbar-slot"></div>
+</div>
+
+<script src="assets/data.js"></script>
+<script src="assets/ui.js"></script>
+<script>
+const user = requireLogin("staf");
+
+function render() {
+  if (!user) return;
+  const outletIds = DB.outlets.filter((o) => user.kawasan_ids.includes(o.kawasan_id)).map((o) => o.id);
+  const bulanIni = hariIni().slice(0, 7);
+  const kutipan = kutipanBerjaya(outletIds, bulanIni);
+  const kutipanSemua = kutipanBerjaya(outletIds, null);
+  const k = statusKpi(user);
+  const totalBaki = outletIds.reduce((s, id) => s + bakiBelumKutip(id), 0);
+
+  // Senarai baki mengikut kedai
+  const bakiItems = outletIds
+    .map((id) => outletById(id))
+    .filter((o) => bakiBelumKutip(o.id) > 0)
+    .map((o) => `
+      <a href="staf-kedai.html?id=${o.id}" class="tap-scale card card-hover flex items-center gap-3 p-3.5">
+        <div class="icon-tile" style="background:var(--danger-bg);">⚠️</div>
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-semibold text-slate-700 truncate">${o.nama_kedai}</p>
+          <p class="text-xs text-slate-400">${o.nama_owner}</p>
+        </div>
+        <div class="text-right">
+          <p class="text-sm font-bold text-rose-500">${fmtRM(bakiBelumKutip(o.id))}</p>
+          <p class="text-[10px] text-slate-400">belum kutip</p>
+        </div>
+      </a>`).join("");
+
+  // Sejarah kutipan (payments berjaya untuk kawasan staf)
+  const pays = DB.payments
+    .filter((p) => {
+      const ev = DB.collection_events.find((e) => e.id === p.collection_event_id);
+      return ev && outletIds.includes(ev.outlet_id);
+    })
+    .sort((a, b) => (b.paid_at || "").localeCompare(a.paid_at || ""))
+    .slice(0, 12);
+
+  const paysHtml = pays.length
+    ? pays.map((p) => {
+        const ev = DB.collection_events.find((e) => e.id === p.collection_event_id);
+        const o = outletById(ev.outlet_id);
+        const ikon = p.kaedah === "cash" ? "💵" : "📱";
+        return `<div class="card flex items-center gap-3 p-3.5">
+          <div class="icon-tile" style="background:${p.status === "berjaya" ? "var(--ok-bg)" : "var(--info-bg)"};">${ikon}</div>
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-semibold text-slate-700 truncate">${o.nama_kedai}</p>
+            <p class="text-xs text-slate-400">${p.rujukan} · ${p.paid_at ? fmtTarikhMasa(p.paid_at) : "menunggu bayaran"}</p>
+          </div>
+          <div class="text-right">
+            <p class="text-sm font-bold text-slate-700">${fmtRM(p.jumlah)}</p>
+            <div class="mt-0.5">${statusChip(p.status)}</div>
+          </div>
+        </div>`;
+      }).join("")
+    : `<div class="card empty-state"><div class="empty-ic">🧾</div><p class="text-sm">Belum ada kutipan direkod.</p></div>`;
+
+  document.getElementById("app").innerHTML = `
+    <div class="hero-card mx-4 mt-4 p-5 anim-fade">
+      <p class="text-indigo-100 text-xs font-medium">Laporan kawasan anda</p>
+      <h1 class="text-lg font-bold leading-snug mt-0.5">${user.nama}</h1>
+      <p class="text-indigo-100 text-xs mt-1">📍 ${user.kawasan_ids.map(kawasanNama).join(" · ")}</p>
+    </div>
+
+    <div class="grid grid-cols-2 gap-3 px-4 mt-4 anim-fade anim-d1">
+      <div class="card p-4">
+        <div class="flex items-center gap-2 text-slate-400 text-xs font-medium"><span>📅</span> Kutipan Bulan Ini</div>
+        <p class="text-2xl font-extrabold text-emerald-600 mt-1">${fmtRM(kutipan)}</p>
+      </div>
+      <div class="card p-4">
+        <div class="flex items-center gap-2 text-slate-400 text-xs font-medium"><span>💰</span> Baki Belum Kutip</div>
+        <p class="text-2xl font-extrabold mt-1 ${totalBaki > 0 ? "text-rose-500" : "text-emerald-600"}">${fmtRM(totalBaki)}</p>
+      </div>
+    </div>
+
+    <div class="card mx-4 mt-3 p-4 anim-fade anim-d1">
+      <div class="flex justify-between items-center">
+        <div>
+          <p class="text-xs text-slate-400 font-medium">Jumlah kutipan sepanjang masa</p>
+          <p class="text-lg font-extrabold text-slate-800 mt-0.5">${fmtRM(kutipanSemua)}</p>
+        </div>
+        <div class="icon-tile" style="background:var(--brand-50);">📈</div>
+      </div>
+    </div>
+
+    <div class="card mx-4 mt-3 p-4 anim-fade anim-d2">
+      <div class="flex items-center justify-between mb-2.5">
+        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wide">🎯 KPI Saya — Bulan Ini</p>
+        ${k.layak ? chip("Capai ✓", "ok") : chip("Belum capai", "warn")}
+      </div>
+      <div class="flex justify-between text-xs mb-1.5">
+        <span class="text-slate-500">Kutipan <b class="text-slate-700">${fmtRM(k.capaian)}</b> / KPI ${fmtRM(k.target)}</span>
+        <span class="font-bold text-slate-600">${k.pct}%</span>
+      </div>
+      <div class="bar-track"><div class="bar-fill" style="width:${Math.max(k.pct, 2)}%;background:${k.layak ? "linear-gradient(90deg,#34d399,#059669)" : "linear-gradient(90deg,#fbbf24,#d97706)"};"></div></div>
+      <div class="flex justify-between items-center mt-2.5 pt-2.5 divider">
+        <span class="text-xs text-slate-400">Bonus bulan ini</span>
+        ${k.layak
+          ? `<span class="text-sm font-bold text-emerald-600">${fmtRM(k.bonus)} — layak ✓</span>`
+          : `<span class="text-xs font-semibold" style="color:var(--danger);">Tiada bonus — KPI belum cukup</span>`}
+      </div>
+    </div>
+
+    <div class="px-4 mt-6 anim-fade anim-d2">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="font-bold text-slate-700 text-sm">⚠️ Baki Belum Kutip</h2>
+        <span class="text-xs text-slate-400">${bakiItems ? "" : "semua selesai"}</span>
+      </div>
+      <div class="space-y-2.5">${bakiItems || `
+        <div class="card empty-state"><div class="empty-ic">🎉</div>
+        <p class="text-sm">Tiada baki — semua kutipan selesai!</p></div>`}</div>
+    </div>
+
+    <div class="px-4 mt-6 anim-fade anim-d3">
+      <h2 class="font-bold text-slate-700 text-sm mb-3">🧾 Sejarah Kutipan Terkini</h2>
+      <div class="space-y-2.5">${paysHtml}</div>
+    </div>`;
+
+  document.getElementById("tabbar-slot").innerHTML = tabbarHtml("laporan");
+}
+render();
+</script>
+</body>
+</html>

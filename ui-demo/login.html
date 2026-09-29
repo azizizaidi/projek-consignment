@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SAS EMPIRE — Sistem Inventori &amp; Consignment</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/style.css" />
+<link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#4f46e5">
+  <link rel="apple-touch-icon" href="assets/icon-180.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="SAS EMPIRE">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/icon-32.png">
+</head>
+<body>
+<div class="min-h-screen grid lg:grid-cols-2">
+
+  <!-- Panel jenama (kiri) -->
+  <div class="relative overflow-hidden p-8 lg:p-14 flex flex-col justify-between" style="background: linear-gradient(150deg, #312e81 0%, #4f46e5 45%, #7c3aed 100%);">
+    <div class="absolute -top-24 -right-24 w-80 h-80 rounded-full" style="background: rgba(255,255,255,0.08);"></div>
+    <div class="absolute bottom-10 -left-20 w-72 h-72 rounded-full" style="background: rgba(255,255,255,0.06);"></div>
+
+    <div class="flex items-center gap-3 relative">
+      <div class="w-11 h-11 rounded-2xl bg-white/15 border border-white/20 flex items-center justify-center text-white font-extrabold text-sm tracking-wide">SAS</div>
+      <div>
+        <p class="text-white font-bold text-sm leading-tight">SAS EMPIRE</p>
+        <p class="text-indigo-200 text-xs">Sistem Inventori &amp; Consignment</p>
+      </div>
+    </div>
+
+    <div class="relative mt-10 lg:mt-0">
+      <h1 class="text-white text-2xl lg:text-4xl font-extrabold leading-tight">
+        Urus stok papan &amp; kutipan kedai —<br class="hidden lg:block" /> dari satu tempat.
+      </h1>
+      <p class="text-indigo-100 mt-4 text-sm lg:text-base max-w-md leading-relaxed">
+        Jejak setiap papan di setiap kedai, kutip bayaran cash atau QR DuitNow,
+        dan lihat baki yang belum dikutip — tepat pada masanya.
+      </p>
+
+      <div class="flex flex-wrap gap-3 mt-7">
+        <div class="bg-white/10 border border-white/15 rounded-2xl px-4 py-3">
+          <p class="text-white font-bold text-lg leading-none">📦 1 papan</p>
+          <p class="text-indigo-200 text-xs mt-1">unit penjejakan</p>
+        </div>
+        <div class="bg-white/10 border border-white/15 rounded-2xl px-4 py-3">
+          <p class="text-white font-bold text-lg leading-none">💳 QR + Cash</p>
+          <p class="text-indigo-200 text-xs mt-1">kutipan fleksibel</p>
+        </div>
+        <div class="bg-white/10 border border-white/15 rounded-2xl px-4 py-3">
+          <p class="text-white font-bold text-lg leading-none">⏱ Event-driven</p>
+          <p class="text-indigo-200 text-xs mt-1">kutip bila papan habis</p>
+        </div>
+      </div>
+    </div>
+
+    <p class="text-indigo-200/70 text-xs relative">Demo UI/UX · data simulasi sahaja</p>
+  </div>
+
+  <!-- Panel log masuk (kanan) -->
+  <div class="flex items-center justify-center p-6 lg:p-10 bg-[#f1f5f9]">
+    <div class="w-full max-w-sm">
+      <div class="mb-7">
+        <h2 class="text-xl font-bold text-slate-800">Selamat datang</h2>
+        <p class="text-sm text-slate-500 mt-1">Log masuk untuk teruskan — demo: pilih akaun di bawah.</p>
+      </div>
+
+      <!-- Akaun demo -->
+      <div class="space-y-2.5">
+        <button onclick="loginAs(1)" class="tap-scale card card-hover w-full flex items-center gap-3 p-3.5 text-left">
+          <div class="w-11 h-11 rounded-2xl bg-violet-100 text-violet-700 flex items-center justify-center font-bold">TA</div>
+          <div class="flex-1">
+            <p class="font-semibold text-slate-800 text-sm">Tuan Azizi</p>
+            <p class="text-xs text-slate-400">Superadmin · semua kawasan</p>
+          </div>
+          <span class="chip chip-violet">Superadmin</span>
+        </button>
+
+        <button onclick="loginAs(2)" class="tap-scale card card-hover w-full flex items-center gap-3 p-3.5 text-left">
+          <div class="w-11 h-11 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">AH</div>
+          <div class="flex-1">
+            <p class="font-semibold text-slate-800 text-sm">Ali Hassan</p>
+            <p class="text-xs text-slate-400">Staf · Kawasan Klang</p>
+          </div>
+          <span class="chip chip-ok">Staf</span>
+        </button>
+
+        <button onclick="loginAs(3)" class="tap-scale card card-hover w-full flex items-center gap-3 p-3.5 text-left">
+          <div class="w-11 h-11 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center font-bold">SA</div>
+          <div class="flex-1">
+            <p class="font-semibold text-slate-800 text-sm">Siti Aminah</p>
+            <p class="text-xs text-slate-400">Staf · Kawasan Shah Alam</p>
+          </div>
+          <span class="chip chip-ok">Staf</span>
+        </button>
+      </div>
+
+      <!-- Borang klasik (hiasan) -->
+      <div class="divider mt-7 pt-6">
+        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-3">Atau guna kelayakan</p>
+        <label class="label">Username</label>
+        <input type="text" class="input mb-2" placeholder="username" />
+        <label class="label">Kata laluan</label>
+        <input type="password" class="input mb-3" placeholder="••••••••" />
+        <button class="btn btn-primary btn-block" onclick="toast('Demo: guna pilihan akaun di atas', 'ℹ️')">Log Masuk</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="assets/data.js"></script>
+<script src="assets/ui.js"></script>
+<script>
+function loginAs(userId) {
+  const u = setCurrentUser(userId);
+  logAksi("Log masuk", `${u.nama} (${u.peranan})`);
+  saveDB();
+  if (u.peranan === "superadmin") {
+    window.location.href = "superadmin.html";
+  } else {
+    window.location.href = "staf-senarai.html";
+  }
+}
+</script>
+</body>
+</html>
