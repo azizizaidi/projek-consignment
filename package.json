@@ -1,0 +1,10 @@
+{
+  "name": "sas-empire-demo",
+  "private": true,
+  "scripts": {
+    "build": "bun build ui-demo/src/app.ts --outfile ui-demo/assets/app.js --target browser",
+    "check": "bun scripts/check.ts",
+    "dev": "bun scripts/serve.ts",
+    "test": "bun test scripts/business.test.ts"
+  }
+}

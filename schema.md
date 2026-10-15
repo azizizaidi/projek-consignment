@@ -58,7 +58,7 @@
 |---|---|---|
 | id | PK | |
 | sku | text, unique | |
-| nama | text | **Produk tunggal: "Papan Sachet Koko"** (tiada produk lain) |
+| nama | text | Nama produk dalam katalog multi-produk; setiap SKU berasingan |
 | unit | text | sentiasa `papan` |
 | harga_papan | decimal | harga yang kedai bayar per papan |
 | stok_min_gudang | int | amaran stok rendah |
@@ -180,3 +180,13 @@ semua tindakan ──> audit_logs
 3. Medan `outlets.harga_khas_papan` nullable (andaian #1 PLAN.md — boleh dibuang jika Tuan mahu harga tetap sahaja).
 4. Penugasan staf ikut `kawasan` (andaian #2 PLAN.md — boleh tukar ke penugasan terus per kedai jika perlu).
 5. Migrasi SQLite → PostgreSQL: elak ciri SQLite-sahaja (contoh: guna `server_default` yang standard).
+
+## Pelarasan multi-produk — 2026-10-15
+
+- `placements.product_id` kekal wajib; setiap baris mewakili satu produk.
+- Penghantaran beberapa produk dibuat bersama; demo mengaitkan baris melalui `shipment_ref`.
+- Harga dan stok gudang berasingan untuk setiap produk; harga penempatan disnapshot.
+- `collection_events.product_id` boleh disimpan; rekod lama diterbitkan melalui placement_id.
+- Kutipan gabungan dipecahkan kepada payments per event dengan `collection_batch` dan resit bersama.
+- Pengagihan bayaran separa bermula dengan event tertua; baki QR pending dikecualikan.
+- Semua unit demo masih papan. Jadual backend belum diimplementasi.

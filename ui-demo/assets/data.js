@@ -2,7 +2,7 @@
 // DATA LAYER — Sistem Inventori & Consignment (demo)
 // Seed data + persistence (localStorage) + helper perniagaan.
 // Struktur ikut schema.md. Data demo — bukan data sebenar.
-// v4: produk TUNGGAL (papan sachet koko) + KPI/bonus per staf.
+// Multi-produk + KPI/bonus per staf. Version 4 dikekalkan supaya data pelayar lama tidak direset.
 // ============================================================
 
 const SEED = {
@@ -18,9 +18,10 @@ const SEED = {
     { id: 3, nama: "Siti Aminah", username: "siti", peranan: "staf", telefon: "014-3334444", kawasan_ids: [2], kpi: { target: 200, bonus: 120 } },
     { id: 4, nama: "Faizal Rahman", username: "faizal", peranan: "staf", telefon: "016-5556666", kawasan_ids: [3], kpi: { target: 100, bonus: 60 } },
   ],
-  // PRODUK TUNGGAL — 1 papan sachet koko sahaja (tiada produk lain)
+  // Katalog demo. Setiap produk mempunyai SKU, harga dan stok gudang sendiri.
   products: [
     { id: 1, sku: "AK-KOKO-01", nama: "Papan Sachet Koko", unit: "papan", harga_papan: 60.0, stok_gudang: 240 },
+    { id: 2, sku: "AK-KOPI-02", nama: "Papan Sachet Kopi", unit: "papan", harga_papan: 45.0, stok_gudang: 30 },
   ],
   outlets: [
     { id: 1, nama_kedai: "Kedai Serbaneka Ali", nama_owner: "Ali Karim", telefon_owner: "011-2233445", kawasan_id: 1, mod_bayar_default: "bayar_kemudian", alamat: "No 12, Jalan Kasturi, Klang" },

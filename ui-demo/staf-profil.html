@@ -1,121 +1,32 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ms">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Profil — Staf</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="assets/style.css" />
-<link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#4f46e5">
-  <link rel="apple-touch-icon" href="assets/icon-180.png">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="SAS EMPIRE">
-  <link rel="icon" type="image/png" sizes="32x32" href="assets/icon-32.png">
-</head>
-<body>
-<div class="mobile-shell">
-  <div id="app"></div>
-  <div id="tabbar-slot"></div>
-</div>
-
-<script src="assets/data.js"></script>
-<script src="assets/ui.js"></script>
-<script>
-const user = requireLogin("staf");
-
-function render() {
-  if (!user) return;
-  const outletIds = DB.outlets.filter((o) => user.kawasan_ids.includes(o.kawasan_id)).map((o) => o.id);
-  const kutipanBulan = kutipanBerjaya(outletIds, hariIni().slice(0, 7));
-  const k = statusKpi(user);
-
-  document.getElementById("app").innerHTML = `
-    <div class="hero-card mx-4 mt-4 p-6 anim-fade text-center">
-      ${avatarHtml(user.nama, "ok").replace('w-10 h-10', 'w-16 h-16').replace('text-sm', 'text-xl').replace('class="', 'class="mx-auto ')}
-      <h1 class="text-lg font-bold mt-3">${user.nama}</h1>
-      <p class="text-indigo-100 text-xs mt-1">Staf Kawasan · ${user.kawasan_ids.map(kawasanNama).join(", ")}</p>
-    </div>
-
-    <div class="grid grid-cols-2 gap-3 px-4 mt-4 anim-fade anim-d1">
-      <div class="card p-4 text-center">
-        <p class="text-xs text-slate-400 font-medium">Kedai Dijaga</p>
-        <p class="text-2xl font-extrabold text-slate-800 mt-1">${outletIds.length}</p>
-      </div>
-      <div class="card p-4 text-center">
-        <p class="text-xs text-slate-400 font-medium">Kutipan Bulan Ini</p>
-        <p class="text-2xl font-extrabold text-emerald-600 mt-1">${fmtRM(kutipanBulan)}</p>
-      </div>
-    </div>
-
-    <div class="px-4 mt-5 anim-fade anim-d2">
-      <div class="card p-4 mb-4">
-        <div class="flex items-center justify-between mb-2">
-          <p class="text-xs font-semibold text-slate-400 uppercase tracking-wide">🎯 KPI &amp; Bonus Bulan Ini</p>
-          ${k.layak ? chip("Capai ✓", "ok") : chip("Belum capai", "warn")}
-        </div>
-        <div class="flex justify-between text-xs mb-1.5">
-          <span class="text-slate-500">Kutipan <b class="text-slate-700">${fmtRM(k.capaian)}</b> / KPI ${fmtRM(k.target)}</span>
-          <span class="font-bold text-slate-600">${k.pct}%</span>
-        </div>
-        <div class="bar-track"><div class="bar-fill" style="width:${Math.max(k.pct, 2)}%;background:${k.layak ? "linear-gradient(90deg,#34d399,#059669)" : "linear-gradient(90deg,#fbbf24,#d97706)"};"></div></div>
-        <p class="text-xs mt-2.5 ${k.layak ? "text-emerald-600 font-bold" : "text-slate-400"}">
-          ${k.layak ? `Bonus ${fmtRM(k.bonus)} layak diterima ✓` : `Tiada bonus — KPI belum cukup (bonus ${fmtRM(k.bonus)} tidak dilepaskan)`}
-        </p>
-      </div>
-      <div class="card divide-y divide-slate-100">
-        <div class="flex items-center justify-between p-4">
-          <div class="flex items-center gap-3">
-            <div class="icon-tile" style="background:var(--brand-50);">👤</div>
-            <div>
-              <p class="text-xs text-slate-400">Nama penuh</p>
-              <p class="text-sm font-semibold text-slate-700">${user.nama}</p>
-            </div>
-          </div>
-        </div>
-        <div class="flex items-center justify-between p-4">
-          <div class="flex items-center gap-3">
-            <div class="icon-tile" style="background:var(--info-bg);">📞</div>
-            <div>
-              <p class="text-xs text-slate-400">Telefon</p>
-              <p class="text-sm font-semibold text-slate-700">${user.telefon}</p>
-            </div>
-          </div>
-        </div>
-        <div class="flex items-center justify-between p-4">
-          <div class="flex items-center gap-3">
-            <div class="icon-tile" style="background:var(--violet-bg);">📍</div>
-            <div>
-              <p class="text-xs text-slate-400">Kawasan ditugaskan</p>
-              <p class="text-sm font-semibold text-slate-700">${user.kawasan_ids.map(kawasanNama).join(", ")}</p>
-            </div>
-          </div>
-        </div>
-        <div class="flex items-center justify-between p-4">
-          <div class="flex items-center gap-3">
-            <div class="icon-tile" style="background:var(--ok-bg);">🛡️</div>
-            <div>
-              <p class="text-xs text-slate-400">Peranan</p>
-              <p class="text-sm font-semibold text-slate-700">Staf</p>
-            </div>
-          </div>
-          ${chip("Aktif", "ok")}
-        </div>
-      </div>
-    </div>
-
-    <div class="px-4 mt-5 space-y-2.5 anim-fade anim-d3">
-      <button onclick="logout()" class="btn btn-soft btn-block">↩️ Log Keluar</button>
-      <button onclick="if (confirm('Set semula semua data demo ke keadaan asal?')) { resetDemo(); window.location.href='login.html'; }" class="btn btn-danger-soft btn-block">🔄 Reset Data Demo</button>
-      <p class="text-center text-xs text-slate-400 pt-2">Demo UI/UX · v2 · data disemak secara setempat</p>
-    </div>`;
-
-  document.getElementById("tabbar-slot").innerHTML = tabbarHtml("profil");
-}
-render();
-</script>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover"
+    />
+    <title>Profil saya — SAS EMPIRE</title>
+    <meta name="theme-color" content="#102031" />
+    <meta
+      name="description"
+      content="SAS EMPIRE — ruang kerja inventori dan consignment."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="assets/style.css?v=az1" />
+    <link rel="manifest" href="manifest.json" />
+    <link rel="icon" href="assets/icon-32.png" />
+    <link rel="apple-touch-icon" href="assets/icon-180.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Langkau ke kandungan</a>
+    <div id="app"></div>
+    <div id="notice" role="status" aria-live="polite"></div>
+    <dialog id="dialog" aria-labelledby="dialog-title"></dialog>
+    <noscript>Aplikasi demo ini memerlukan JavaScript.</noscript>
+    <script src="assets/data.js"></script>
+    <script src="assets/app.js?v=az1"></script>
+  </body>
 </html>

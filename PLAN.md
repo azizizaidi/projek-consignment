@@ -2,14 +2,14 @@
 
 **Tarikh:** 2026-09-27
 **Status:** DILULUSKAN oleh Tuan (2026-09-26/27) — draf asal dibina secara interaktif, 5 pusingan semakan.
-**Peringkat:** Fasa 0 (spesifikasi). Tiada kod ditulis lagi.
+**Peringkat:** Spesifikasi backend Fasa 0; demo UI A–Z tersedia dalam ui-demo/ (redesign 2026-10-15). Backend belum dibina.
 
 ---
 
 ## 1. Latar belakang & matlamat
 
 Tuan Azizi adalah **supplier** produk sachet (air koko), unit jualan = **1 papan**.
-**Produk tunggal sahaja: Papan Sachet Koko** — tiada produk lain dalam sistem.
+**Multi-produk** — setiap produk mempunyai SKU, harga per papan dan stok gudang sendiri. Keperluan satu produk asal digantikan atas arahan Tuan pada 2026-10-15.
 Barang ditempatkan di kedai-kedai runcit (5–20 buah) yang diuruskan oleh staf kawasan.
 
 **Matlamat sistem:** menggantikan catatan manual/WhatsApp dengan sistem web yang:
@@ -54,7 +54,7 @@ Semua tindakan pengguna direkod dalam log audit (siapa, bila, apa).
 
 | Modul | Fungsi |
 |---|---|
-| Produk & Gudang | **Produk tunggal** (Papan Sachet Koko — unit: papan, harga per papan), stok gudang, pergerakan (masuk, hantar ke kedai, pulangan, rosak, adjustment) |
+| Produk & Gudang | **Multi-produk** (katalog SKU; unit: papan; harga dan stok per produk), stok gudang, pergerakan (masuk, hantar ke kedai, pulangan, rosak, adjustment) |
 | Outlet & Owner | Maklumat kedai/owner, kawasan, mod bayar default, staf kawasan bertugas, harga khas (pilihan) |
 | Penempatan Stok | Hantar papan ke kedai: mod bayar, kuantiti, harga snapshot, status (aktif → habis) |
 | Koleksi & Restok | Event *papan habis* → kutip bayaran (N papan × harga) → restok papan baru. Papan belum habis = baki/potensi kutipan |

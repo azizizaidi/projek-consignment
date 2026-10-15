@@ -1,13 +1,13 @@
 {
-  "name": "SAS EMPIRE \u2014 Sistem Inventori & Consignment",
+  "name": "SAS EMPIRE — Sistem Inventori & Consignment",
   "short_name": "SAS EMPIRE",
-  "description": "Sistem Inventori & Consignment \u2014 urus stok papan & kutipan kedai",
+  "description": "Sistem Inventori & Consignment — urus stok papan & kutipan kedai",
   "start_url": "./login.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#f1f5f9",
-  "theme_color": "#4f46e5",
+  "background_color": "#f6f7f9",
+  "theme_color": "#102031",
   "lang": "ms",
   "icons": [
     {
