@@ -1,8 +1,8 @@
 // SAS EMPIRE — service worker (PWA)
-const CACHE = "sas-empire-v1";
+const CACHE = "sas-warrior-dashboard-v2";
 const SHELL = [
   "./", "./login.html", "./index.html",
-  "./staf-senarai.html", "./staf-kedai.html", "./staf-laporan.html", "./staf-profil.html",
+  "./staf-dashboard.html", "./staf-senarai.html", "./staf-kedai.html", "./staf-laporan.html", "./staf-profil.html",
   "./superadmin.html",
   "./assets/style.css", "./assets/data.js", "./assets/ui.js",
   "./assets/icon-192.png", "./assets/icon-512.png",
