@@ -58,6 +58,7 @@ function kosong(value) {
 // Tab bar untuk halaman staf (mobile)
 function tabbarHtml(active) {
   const tabs = [
+    { id: "utama", href: "staf-dashboard.html", ic: "⌂", label: "Utama" },
     { id: "kedai", href: "staf-senarai.html", ic: "🏪", label: "Kedai" },
     { id: "laporan", href: "staf-laporan.html", ic: "📊", label: "Laporan" },
     { id: "profil", href: "staf-profil.html", ic: "👤", label: "Profil" },
