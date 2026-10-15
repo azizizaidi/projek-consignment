@@ -1,53 +1,87 @@
-# SAS EMPIRE — Sistem Inventori & Consignment
+# SAS EMPIRE — Inventori & Consignment
 
-Demo UI/UX sistem inventori + consignment untuk supplier **Papan Sachet Koko** (produk tunggal).
+Demo interaktif dengan reka bentuk baharu A–Z untuk operasi consignment multi-produk (unit: papan).
 
-- **Staf kawasan** — lihat kedai dalam kawasan masing-masing, rekod penempatan papan, kutip bayaran bila papan habis, restok, hantar pautan bayar QR (Billplz).
-- **Superadmin (owner)** — urus kedai, staf & kawasan, tetapkan **KPI + bonus berbeza setiap staf** (tak cukup KPI = tiada bonus), laporan, tetapan Billplz.
-- Demo ini berfungsi penuh A→Z dengan data kekal (localStorage pelayar).
+## Jalankan preview
+
+Bun diperlukan. Tiada dependency aplikasi tambahan.
+
+```bash
+bun run build
+bun run dev
+```
+
+Buka `http://localhost:4320/`. Pilih akaun demo pada skrin login.
+Untuk port lain: `PORT=4321 bun run dev`.
+
+## Ruang kerja
+
+**Staf:** dashboard harian → kedai + carian/penapis → butiran kedai → hantar papan /
+papan habis + kutip + restok → bayaran cash/separa/QR simulasi → laporan → profil.
+
+**Superadmin:** ringkasan operasi → kedai → staf & kawasan + KPI/bonus → produk dan
+stok gudang → laporan bertempoh → tetapan demo.
+
+Navigasi sidebar pada desktop dan navigasi bawah pada telefon. Semua dialog
+menggunakan `<dialog>` native, dengan fokus papan kekunci dan label borang.
 
 ## Struktur
 
+```text
+ui-demo/src/app.ts       Sumber TypeScript untuk semua skrin dan interaksi
+ui-demo/assets/app.js    Bundle browser; jana semula dengan bun run build
+ui-demo/assets/data.js   Seed dan persistence localStorage sedia ada
+ui-demo/assets/style.css Sistem visual dan responsive layout tanpa Tailwind CDN
+ui-demo/assets/brand.svg Logo dan sumber ikon PWA
+ui-demo/*.html           Entry point statik untuk setiap skrin
+ui-demo/sw.js            App shell cache, network-first dengan fallback offline
+scripts/serve.ts         Pelayan preview Bun
+scripts/check.ts         Semakan syntax dan aset tempatan
+scripts/business.test.ts Regresi stok, kutipan, caj berganda dan akses kawasan
+PLAN.md / schema.md      Pelan backend dan skema; belum diimplementasi
+REDESIGN.md              Skop, bukti verifikasi dan had semakan
 ```
-ui-demo/          → aplikasi demo (buka login.html)
-  assets/         → CSS, data (localStorage), UI helpers, ikon PWA
-  manifest.json   → PWA manifest
-  sw.js           → service worker (guna luar talian)
-PLAN.md           → pelan projek & aliran perniagaan
-schema.md         → reka bentuk pangkalan data
+
+Selepas edit `app.ts`, jalankan `bun run build` sebelum preview/publish. Bundle
+JavaScript disertakan supaya demo boleh dihoskan secara statik.
+
+## Semakan
+
+```bash
+bun run check
+bun test
 ```
 
-## Cara guna (komputer)
+## Data dan bayaran
 
-Buka `ui-demo/login.html` dalam pelayar. Pilih akaun demo (Staf / Superadmin).
+Data demo hanya disimpan pada pelayar/peranti masing-masing; tiada penyegerakan
+antara pengguna. Pilihan akaun bukan authentication sebenar. QR/Billplz ialah
+simulasi; pengesahan melalui butang **Simulasi diterima** tidak menghantar webhook
+atau transaksi bank. Pautan WhatsApp hanya dibuka apabila diklik pengguna.
 
----
+Penghantaran dan restok mengurangkan stok gudang. Mod bayar dulu mewujudkan hutang
+semasa penghantaran; menandakan papan itu habis tidak mencipta caj kedua untuk
+penempatan yang sama. Restok mewujudkan penempatan baharu mengikut harga semasa.
 
-## 📱 Install di Android (Chrome)
+## PWA
 
-1. Buka pautan demo dalam **Chrome**: `https://azizizaidi.github.io/projek-consignment/ui-demo/login.html`
-2. Tekan menu **⋮** (tiga titik) di kanan atas.
-3. Pilih **"Tambah ke skrin utama"** / *Add to Home screen*.
-4. Beri nama **SAS EMPIRE** → tekan **Tambah / Install**.
-5. Ikon **SAS EMPIRE** muncul di skrin utama — buka seperti app biasa (skrin penuh, tanpa bar alamat).
+Manifest, ikon dan service worker disediakan. Hoskan melalui HTTP localhost atau
+HTTPS. Android: Chrome → menu → tambah ke skrin utama. iPhone: Safari → Share →
+tambah ke skrin utama. Pemasangan peranti sebenar dan operasi offline lengkap
+masih perlu disemak sebelum membuat tuntutan sokongan produksi. Font Google
+menggunakan fallback sistem jika tidak tersedia.
 
-## 📱 Install di iPhone / iPad (Safari)
+Backend, database sebenar, login selamat dan integrasi Billplz masih kerja berasingan.
 
-1. Buka pautan demo dalam **Safari**: `https://azizizaidi.github.io/projek-consignment/ui-demo/login.html`
-2. Tekan butang **Share** (ikon kotak dengan anak panah ⬆) di bawah.
-3. Tatal ke bawah → pilih **"Tambah ke Skrin Utama"** / *Add to Home Screen*.
-4. Beri nama **SAS EMPIRE** → tekan **Tambah**.
-5. Ikon **SAS EMPIRE** muncul di skrin utama.
+## Multi-produk
 
-> Nota: guna **Safari** untuk iPhone (Chrome di iOS tidak menyokong *Add to Home Screen* dengan betul).
-
-## Ciri PWA
-
-- ✅ Buka terus dari skrin utama, mod skrin penuh (seperti app)
-- ✅ Ikon & splash skrin jenama SAS EMPIRE
-- ✅ Boleh dibuka walaupun talian internet lemah (cache)
-- ⚠️ Data demo disimpan dalam pelayar peranti masing-masing (localStorage) — *Reset Data Demo* ada dalam app.
-
-## Pembangunan seterusnya (lihat PLAN.md)
-
-Fasa 1–6: backend FastAPI + PostgreSQL, login sebenar, pembayaran Billplz (DuitNow QR + FPX) dengan webhook auto-sah, laporan penuh.
+- Tambah/edit produk dengan SKU unik, harga dan stok awal berasingan di **Produk & stok**.
+- Satu penghantaran boleh mengandungi beberapa produk; jumlah dikira secara langsung.
+- Jika mana-mana stok tidak cukup, seluruh penghantaran ditolak sebelum mengubah data.
+- Pilih penempatan produk yang habis. Kutipan dan restok hanya menjejaskan produk itu.
+- **Semua baki kedai** menggabungkan kutipan; pecahan per produk/event kekal boleh diaudit.
+- Laporan kutipan boleh ditapis mengikut produk; KPI kekal semua produk bulan semasa.
+- Data pelayar sedia ada dikekalkan. Katalog contoh Koko/Kopi tersedia pada pelayar baharu
+  atau selepas reset demo; pengguna lama boleh tambah produk melalui katalog tanpa reset.
+- QR gabungan masih menghasilkan rekod simulasi berasingan per event; tiada satu bil
+  gateway sebenar dijana dalam demo ini.
