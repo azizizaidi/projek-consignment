@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Dashboard Staf — SAS WARRIOR (Demo)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#ffffff">
+<style>
+/* Scoped dashboard design system: no changes to existing pages. */
+.warrior-dashboard{background:#f8fafc;min-height:100vh;padding:0 16px 108px;color:#0f172a}
+.warrior-dashboard *{box-sizing:border-box}
+.wd-header{display:flex;justify-content:space-between;align-items:center;padding:24px 0 18px;gap:12px}
+.wd-eyebrow{font-size:11px;letter-spacing:.06em;font-weight:700;color:#64748b}
+.wd-heading{font-size:25px;font-weight:800;letter-spacing:-.04em;margin:4px 0}
+.wd-context{font-size:12px;color:#64748b}
+.wd-header a{display:grid;place-items:center;min-width:48px;min-height:48px;border:1px solid #e2e8f0;border-radius:12px;color:#334155;background:white;text-decoration:none;font-size:13px;font-weight:700}
+.wd-section{margin-top:24px}
+.wd-section h2{font-size:15px;letter-spacing:-.01em;font-weight:750;margin:0 0 12px}
+.wd-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.wd-card{background:white;border:1px solid #e2e8f0;border-radius:12px;padding:15px;min-width:0}
+.wd-label{font-size:12px;font-weight:600;color:#64748b;line-height:1.5}
+.wd-value{margin-top:9px;font-weight:800;font-size:clamp(18px,5.5vw,24px);letter-spacing:-.045em;overflow-wrap:anywhere;line-height:1.15}
+.wd-help{margin-top:8px;font-size:11px;color:#64748b;line-height:1.5}
+.wd-unavailable{font-size:17px;font-weight:700;color:#475569}
+.wd-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 0;min-height:64px}
+.wd-row+.wd-row{border-top:1px solid #e2e8f0}
+.wd-row-main{min-width:0}
+.wd-row-title{font-weight:650;font-size:13px}
+.wd-row-sub{color:#64748b;font-size:12px;line-height:1.4;margin-top:4px}
+.wd-arrow{font-size:18px;color:#64748b;flex:none}
+.wd-action{display:flex;min-height:48px;align-items:center;justify-content:center;border-radius:10px;padding:10px 12px;text-decoration:none;font-size:13px;font-weight:700;text-align:center;line-height:1.4}
+.wd-primary{background:#4f46e5;color:white}
+.wd-outline{border:1px solid #cbd5e1;background:#fff;color:#334155}
+.wd-disabled{background:#f1f5f9;color:#64748b;cursor:not-allowed;border:1px solid #e2e8f0}
+.wd-progress{background:#e2e8f0;height:8px;border-radius:99px;overflow:hidden;margin:13px 0 8px}
+.wd-progress>div{background:#4f46e5;height:100%;border-radius:99px}
+.wd-kpi-head{display:flex;justify-content:space-between;align-items:baseline;gap:6px;flex-wrap:wrap}
+.wd-kpi-number{font-size:22px;font-weight:800;letter-spacing:-.035em}
+.wd-kpi-target{font-size:12px;color:#64748b}
+.wd-footnote{font-size:11px;color:#64748b;line-height:1.6;margin:14px 0 0}
+.wd-tabbar{position:fixed;bottom:0;left:0;right:0;z-index:10;max-width:480px;margin:auto;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));background:white;border-top:1px solid #e2e8f0;padding:7px 4px max(7px,env(safe-area-inset-bottom))}
+.wd-tabbar a{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;color:#64748b;text-decoration:none;font-size:11px;font-weight:600;min-height:48px}
+.wd-tabbar a[aria-current="page"]{color:#4338ca}
+.wd-tabbar svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.wd-note{padding:10px 12px;border-radius:9px;background:#eef2ff;color:#3730a3;font-size:11px;line-height:1.55}
+.wd-action:focus-visible,.wd-tabbar a:focus-visible,.wd-header a:focus-visible{outline:3px solid #818cf8;outline-offset:2px}
+@media(min-width:480px){.warrior-dashboard{padding-left:20px;padding-right:20px}.wd-value{font-size:24px}}
+@media(prefers-reduced-motion:reduce){.warrior-dashboard *{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="mobile-shell">
+<main class="warrior-dashboard" id="dashboard">
+<header class="wd-header">
+ <div><div class="wd-eyebrow">SAS WARRIOR · STAF</div><h1 class="wd-heading">Dashboard</h1><p class="wd-context" id="identity">Memuatkan maklumat staf…</p></div>
+ <a href="staf-profil.html" aria-label="Buka profil staf">Profil</a>
+</header>
+<div class="wd-note">Paparan demo. Data disimpan pada peranti ini sahaja; bukan rekod kewangan atau inventori sebenar.</div>
+<section class="wd-section" aria-labelledby="summary-heading">
+<h2 id="summary-heading">Ringkasan saya</h2>
+<div class="wd-grid">
+<div class="wd-card"><p class="wd-label">Tunai di tangan</p><p class="wd-value wd-unavailable">Belum tersedia</p><p class="wd-help">Modul serahan tunai belum dibina</p></div>
+<div class="wd-card"><p class="wd-label">Stok di tangan</p><p class="wd-value wd-unavailable">Belum tersedia</p><p class="wd-help">Ledger inventori staf belum dibina</p></div>
+</div>
+</section>
+<section class="wd-section" aria-labelledby="tasks-heading">
+<h2 id="tasks-heading">Tindakan hari ini</h2>
+<div class="wd-card" style="padding:0 15px">
+<a href="staf-senarai.html" class="wd-row" style="text-decoration:none;color:inherit">
+<div class="wd-row-main"><p class="wd-row-title" id="outstanding">Memuatkan kutipan…</p><p class="wd-row-sub" id="outstanding-sub">Berdasarkan kedai kawasan staf (demo)</p></div><span class="wd-arrow" aria-hidden="true">›</span>
+</a>
+<div class="wd-row">
+<div class="wd-row-main"><p class="wd-row-title">Bank-in menunggu semakan</p><p class="wd-row-sub">Belum tersedia — modul bank-in belum dibina</p></div><span class="wd-arrow" aria-hidden="true">—</span>
+</div>
+</div>
+</section>
+<section class="wd-section" aria-labelledby="action-heading">
+<h2 id="action-heading">Tindakan pantas</h2>
+<a class="wd-action wd-primary" href="staf-senarai.html">Pilih kedai untuk rekod kutipan</a>
+<div class="wd-grid" style="margin-top:10px">
+<button type="button" class="wd-action wd-disabled" disabled title="Modul bank-in belum dibina">Bank-in tunai · Akan datang</button>
+<button type="button" class="wd-action wd-disabled" disabled title="Ledger stok staf belum dibina">Hantar stok dari staf · Akan datang</button>
+</div>
+</section>
+<section class="wd-section" aria-labelledby="performance-heading">
+<h2 id="performance-heading">Prestasi bulan ini</h2>
+<div class="wd-card">
+<div class="wd-kpi-head"><p class="wd-kpi-number" id="kpi-value">—</p><p class="wd-kpi-target" id="kpi-target">Sasaran —</p></div>
+<div class="wd-progress" role="progressbar" aria-label="Pencapaian KPI" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="kpi-progress"><div id="kpi-fill" style="width:0%"></div></div>
+<p class="wd-label" id="kpi-caption">Memuatkan KPI…</p>
+<div class="wd-row" style="margin-top:10px;border-top:1px solid #e2e8f0">
+<div class="wd-row-main"><p class="wd-row-title">Bonus KPI demo</p><p class="wd-row-sub">Belum termasuk basic atau level komisyen baharu</p></div><strong id="bonus-value">—</strong>
+</div>
+</div>
+<p class="wd-footnote">KPI demo dikira mengikut kutipan berjaya bagi seluruh kawasan staf. Angka ini belum boleh digunakan sebagai komisyen individu apabila beberapa staf berkongsi kawasan.</p>
+</section>
+</main>
+<nav class="wd-tabbar" aria-label="Navigasi staf">
+<a href="staf-dashboard.html" aria-current="page"><svg viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg>Utama</a>
+<a href="staf-senarai.html"><svg viewBox="0 0 24 24"><path d="M3 10V6l2-3h14l2 3v4M4 10v11h16V10M3 10c1 3 4 3 6 0 2 3 4 3 6 0 2 3 5 3 6 0"/></svg>Kedai</a>
+<a href="staf-laporan.html"><svg viewBox="0 0 24 24"><path d="M5 20V11M12 20V4M19 20v-9"/></svg>Laporan</a>
+<a href="staf-profil.html"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-8 16-8 16 0"/></svg>Profil</a>
+</nav>
+</div>
+<script src="assets/data.js"></script>
+<script>
+(function(){
+ const user=requireLogin("staf"); if(!user)return;
+ const month=hariIni().slice(0,7);
+ const formatter=new Intl.DateTimeFormat("ms-MY",{month:"long",year:"numeric"});
+ document.getElementById("identity").textContent=user.nama+" · "+formatter.format(new Date(Number(month.slice(0,4)),Number(month.slice(5,7))-1,1));
+ const outletIds=outletIdsOfStaf(user);
+ const outstanding=outletIds.reduce((sum,id)=>sum+bakiBelumKutip(id),0);
+ const count=outletIds.filter(id=>bakiBelumKutip(id)>0).length;
+ document.getElementById("outstanding").textContent=count?count+" kedai ada baki belum kutip":"Tiada baki tertunggak direkod";
+ document.getElementById("outstanding-sub").textContent=count?fmtRM(outstanding)+" · Kedai dalam kawasan staf (demo)":"Semak senarai kedai untuk butiran";
+ const k=statusKpi(user);
+ document.getElementById("kpi-value").textContent=fmtRM(k.capaian);
+ document.getElementById("kpi-target").textContent="Sasaran "+fmtRM(k.target);
+ const percent=k.target>0?Math.min(100,Math.round(k.capaian/k.target*100)):0;
+ document.getElementById("kpi-fill").style.width=percent+"%";
+ const progress=document.getElementById("kpi-progress");progress.setAttribute("aria-valuenow",String(percent));
+ document.getElementById("kpi-caption").textContent=k.target>0?(percent+"% · "+(k.layak?"Sasaran demo dicapai":fmtRM(Math.max(0,k.target-k.capaian))+" lagi untuk sasaran")):"Tiada sasaran KPI ditetapkan";
+ document.getElementById("bonus-value").textContent=fmtRM(k.layak?k.bonus:0);
+})();
+</script>
+</body>
+</html>
